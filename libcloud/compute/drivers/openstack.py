@@ -3236,7 +3236,7 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
                     'network_id': network.id,
                 }
         }
-        if description != '':
+        if description is not None:
             data['port']['description'] = description
         response = self.network_connection.request(
             '/v2.0/ports', method='POST', data=data
