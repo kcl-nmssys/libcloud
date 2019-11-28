@@ -3081,12 +3081,13 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
                     'network_id': network.id,
                     'ip_version': ip_version,
                     'name': name or '',
-                    'description': description or '',
                     'dns_nameservers': dns_nameservers or [],
                     'host_routes': host_routes or [],
                     'enable_dhcp': enable_dhcp
                 }
         }
+        if description != '':
+            data['subnet']['description'] = description
         response = self.network_connection.request(
             self._subnets_url_prefix, method='POST', data=data).object
         return self._to_subnet(response['subnet'])
@@ -3230,12 +3231,13 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
         data = {
             'port':
                 {
-                    'description': description or '',
                     'admin_state_up': admin_state_up,
                     'name': name or '',
                     'network_id': network.id,
                 }
         }
+        if description != '':
+            data['port']['description'] = description
         response = self.network_connection.request(
             '/v2.0/ports', method='POST', data=data
         )
@@ -3660,12 +3662,13 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
             'router':
                 {
                     'name': name or '',
-                    'description': description or '',
                     'admin_state_up': admin_state_up,
                 }
         }
         if external_gateway_info:
             data['router']['external_gateway_info'] = external_gateway_info
+        if description != '':
+            data['router']['description'] = description
         response = self.network_connection.request(
             '/v2.0/routers', method='POST', data=data).object
         return self._to_router(response['router'])
