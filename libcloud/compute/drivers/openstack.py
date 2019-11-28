@@ -3044,7 +3044,7 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
 
     def ex_create_subnet(self, name, network, cidr, ip_version=4,
                          description='', dns_nameservers=None,
-                         host_routes=None):
+                         host_routes=None, enable_dhcp=True):
         """
         Create a new Subnet
 
@@ -3069,6 +3069,9 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
         :param host_routes: Additional routes for the subnet.
         :type host_routes: ``list`` of ``str``
 
+        :param enable_dhcp: Whether to enable DHCP for the subnet.
+        :type enable_dhcp: ``bool``
+
         :rtype: :class:`OpenStack_2_SubNet`
         """
         data = {
@@ -3080,7 +3083,8 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
                     'name': name or '',
                     'description': description or '',
                     'dns_nameservers': dns_nameservers or [],
-                    'host_routes': host_routes or []
+                    'host_routes': host_routes or [],
+                    'enable_dhcp': enable_dhcp
                 }
         }
         response = self.network_connection.request(
