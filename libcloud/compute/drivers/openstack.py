@@ -3515,6 +3515,7 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
             from_port = obj['port_range_min']
             to_port = obj['port_range_max']
             protocol = obj['protocol']
+            direction = obj['direction']
 
         return OpenStackSecurityGroupRule(
             id=obj['id'], parent_group_id=parent_id,
@@ -3522,7 +3523,7 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
             to_port=to_port, driver=self, ip_range=ip_range,
             group=group, tenant_id=tenant_id, direction=direction)
 
-    def ex_create_security_group_rule(self, security_group, ip_protocol,
+    def ex_create_security_group_rule(self, security_group, direction='ingress', ip_protocol,
                                       from_port, to_port, cidr=None,
                                       source_security_group=None):
         """
@@ -3530,6 +3531,9 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
 
         :param security_group: Security Group in which to add the rule
         :type  security_group: :class:`OpenStackSecurityGroup`
+
+        :param direction: Security group Direction (ingress or egress).
+        :type  direction: ``str``
 
         :param ip_protocol: Protocol to which this rule applies
                             Examples: tcp, udp, ...
@@ -3557,7 +3561,7 @@ class OpenStack_2_NodeDriver(OpenStack_1_1_NodeDriver):
         return self._to_security_group_rule(self.network_connection.request(
             '/v2.0/security-group-rules', method='POST',
             data={'security_group_rule': {
-                'direction': 'ingress',
+                'direction': direction,
                 'protocol': ip_protocol,
                 'port_range_min': from_port,
                 'port_range_max': to_port,
